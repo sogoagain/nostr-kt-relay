@@ -5,8 +5,8 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import java.sql.*
 import kotlinx.coroutines.*
+import java.sql.*
 
 fun Application.configureDatabases() {
     val dbConnection: Connection = connectToPostgres()
@@ -66,14 +66,9 @@ fun Application.configureDatabases() {
  * your application shuts down by calling [Connection.close]
  * */
 fun Application.connectToPostgres(): Connection {
-    val isEmbedded = environment.config.property("database.embedded").getString().toBoolean()
     val url = environment.config.property("database.url").getString()
     val user = environment.config.property("database.user").getString()
     val password = environment.config.property("database.password").getString()
     Class.forName("org.postgresql.Driver")
-    return if (isEmbedded) {
-        DriverManager.getConnection(url, user, password)
-    } else {
-        DriverManager.getConnection(url, user, password)
-    }
+    return DriverManager.getConnection(url, user, password)
 }

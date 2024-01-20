@@ -1,14 +1,24 @@
-package com.sogoagain.relay.plugins
+package com.sogoagain.relay.dao
 
-import com.sogoagain.relay.dao.dao
 import com.sogoagain.relay.domain.NostrEvent
-import io.ktor.server.application.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import com.typesafe.config.ConfigFactory
+import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.shouldBe
 
-fun Application.configureRouting() {
-    routing {
-        get("/") {
+class NostrEventStorageTests : DescribeSpec({
+    describe("NostrEventStorage") {
+        beforeEach {
+            val config = ConfigFactory.load("application.conf")
+            DatabaseSingleton.init(
+                config = DatabaseConfig(
+                    url = config.getString("database.url"),
+                    user = config.getString("database.user"),
+                    password = config.getString("database.password")
+                )
+            )
+        }
+
+        it("addNewEvent() and event()") {
             val added = NostrEvent(
                 id = "4376c65d2f232afbe9b882a35baa4f6fe8667c4e684749af565f981833ed6a65",
                 pubkey = "6e468422dfb74a5738702a8823b9b28168abab8655faacb6853cd0ee15deee93",
@@ -34,8 +44,8 @@ fun Application.configureRouting() {
 
             dao.addNewEvent(added)
             val selected = dao.event(added.id)
-            println(selected)
-            call.respondText("Hello World!")
+
+            selected shouldBe added
         }
     }
-}
+})

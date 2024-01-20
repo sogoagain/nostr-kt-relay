@@ -1,26 +1,25 @@
 package com.sogoagain.relay
 
-import com.sogoagain.relay.plugins.configureRouting
-import io.kotest.assertions.ktor.client.shouldHaveStatus
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
+import io.ktor.client.plugins.websocket.*
 import io.ktor.server.testing.*
+import io.ktor.websocket.*
 
 class ApplicationTests : DescribeSpec({
     describe("Application") {
-        describe("configureRouting()") {
-            describe("GET /") {
-                it("should return 'Hello World!'") {
+        describe("configureSockets()") {
+            describe("/ws") {
+                it("echo message") {
                     testApplication {
-                        application {
-                            configureRouting()
+                        val client = createClient {
+                            install(WebSockets)
                         }
-                        client.get("/").apply {
-                            this shouldHaveStatus HttpStatusCode.OK
-                            bodyAsText() shouldBe "Hello World!"
+                        client.webSocket("/ws") {
+                            send(Frame.Text("Hello World!"))
+                            (incoming.receive() as Frame.Text).readText() shouldBe "YOU SAID: Hello World!"
+                            send(Frame.Text("bye"))
+                            (incoming.receive() as Frame.Text).readText() shouldBe "YOU SAID: bye"
                         }
                     }
                 }
