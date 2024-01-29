@@ -1,12 +1,11 @@
 # nostr-kt-relay
 
-> Note: This project is currently under development.
+## Overview
+`nostr-kt-relay` is a Kotlin-based relay server for the Nostr protocol, focused on scalability and efficient traffic management.
 
-A high-performance Kotlin-based relay server for the Nostr protocol, designed for scalability and efficient handling of
-large-scale traffic.
+> 🚧 It's in active development and may be unstable.
 
 ## NIPs
-
 - [ ] NIP-01: [Basic protocol flow description](https://github.com/nostr-protocol/nips/blob/master/01.md)
 - [ ] NIP-02: [Follow List](https://github.com/nostr-protocol/nips/blob/master/02.md)
 - [ ] NIP-04: [Encrypted Direct Message](https://github.com/nostr-protocol/nips/blob/master/04.md)
@@ -20,16 +19,14 @@ large-scale traffic.
 - [ ] NIP-45: [Event Counts](https://github.com/nostr-protocol/nips/blob/master/45.md)
 - [ ] NIP-50: [Search Capability](https://github.com/nostr-protocol/nips/blob/master/50.md)
 
-## How to build and run
+## Building and Running
 
 ### Build a fat JAR
-
 ```shell
 ./gradlew buildFatJar
 ```
 
 ### Run a fat JAR
-
 ```shell
 DB_URL=${DB_URL} DB_USER=${DB_USER} DB_PASSWORD=${DB_PASSWORD} ./gradlew runFatJar
 ```
